@@ -115,7 +115,7 @@ def message_handle(message):
             bot.send_message(message.chat.id, "Книга была удалена из Вашего списка читаемого.")
             return
     elif message.text == 'О нас':
-        bot.send_message(message.from_user.id, "Башкиров Данил - разработчик\nПозняк Даниил - разработчик\nВальба "
+        bot.send_message(message.from_user.id, "Башкиров Данил - разработчик системы рекомендаций\nПозняк Даниил - разработчик бота\nВальба "
                                                "Ольга - научный руководитель\n")
     elif message.text == "Найти книгу":
         keyboard = types.ReplyKeyboardMarkup()
@@ -219,8 +219,6 @@ def memorizing(message):
                     writer.writerow(line)
         bot.send_message(message.from_user.id, "Отлично, запомнил!", reply_markup=types.ReplyKeyboardRemove())
         open('users/' + str(message.from_user.id) + '.csv', "a", newline='')
-        del age[message.from_user.id]
-        del sex[message.from_user.id]
         cold_start1(message)
     else:
         bot.send_message(message.from_user.id, "Давайте еще раз:",
@@ -409,6 +407,7 @@ def cold_start10(message):
 
 def find_book(message):
     name = "books.csv"
+    needed = ""
     needed = message.text
     if needed == 'Назад':
         make_keyboard(message)
@@ -581,7 +580,7 @@ def next_reg(message):
         keyboard_yes.add(key_read)
         keyboard_yes.add(key_help, key_about)
         bot.send_message(message.from_user.id,
-                         'Советуем оценить несколько Ваших любих книг в меню \"Найти книгу\", '
+                         'Советуем оценить несколько Ваших любимых книг в меню \"Найти книгу\", '
                          'чтобы рекомендации были точнее.', reply_markup=keyboard_yes)
 
 
@@ -759,7 +758,7 @@ def recommend(message):
                 if row[0] == str(user_id - 1):
                     k += 1
                 if str(k) == iterator:
-                    needed_id = row[1]
+                    needed_id = str(int(row[1])+1)
         # проверка
         with open('ratings.csv', 'r', encoding='windows-1251') as file:
             reader = csv.reader(file)
