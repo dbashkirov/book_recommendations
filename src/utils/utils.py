@@ -21,7 +21,7 @@ def format_str(text):
 
 
 def prepare_ratings():
-    ratings = pd.read_csv('../../old_ratings.csv')
+    ratings = pd.read_csv('../../data/raw/old_ratings.csv')
     new_ratings = pd.read_csv('../../ratings.csv', header=None, names=['user_id', 'book_id', 'rating'])
     ratings = pd.concat([ratings, new_ratings], ignore_index=True)
 
@@ -37,7 +37,7 @@ def prepare_ratings():
 
 
 def prepare_books():
-    books = pd.read_csv('../../translated_books.csv')
+    books = pd.read_csv('../../data/processed/translated_books.csv')
     gid = books['goodreads_book_id']
     books.drop(labels=['ratings_count', 'work_ratings_count', 'work_text_reviews_count',
                        'ratings_1', 'ratings_2', 'ratings_3', 'ratings_4', 'ratings_5',
