@@ -1,5 +1,6 @@
 from lightfm import LightFM
 from multiprocessing import cpu_count
+import pickle
 
 
 class Model:
@@ -12,9 +13,17 @@ class Model:
         self.ratings = ratings
         self.book_features = book_features
         self.model.fit(ratings, item_features=book_features, num_threads=cpu_count(), epochs=self.n_epochs)
+        self._save_model('../models/model.pkl')
 
-    def predict(self):
-        pass
+    def predict(self, user_id, item_id):
+        self._load_model('../models/model.pkl')
+        return self.model.predict(user_id, item_id, item_features=self.book_features)
 
-    def infer(self):
-        pass
+    def _save_model(self, path: str):
+        with open(path, 'wb') as f:
+            pickle.dump(self.model, f, protocol=pickle.HIGHEST_PROTOCOL)
+
+    def _load_model(self, path: str):
+        with open(path, 'rb') as f:
+            self.model = pickle.load(f)
+

@@ -3,8 +3,10 @@ import numpy as np
 import pandas as pd
 import scipy.sparse as sp
 from sklearn.preprocessing import minmax_scale
-from sklearn.feature_extraction.text import TfidfTransformer, CountVectorizer
-from ..src.model import Model
+# from sklearn.feature_extraction.text import TfidfTransformer, CountVectorizer
+import sys
+sys.path.append('..')
+from src.model import Model
 
 
 def delete_punctuation(text):
@@ -19,8 +21,8 @@ def format_str(text):
 
 
 def prepare_ratings():
-    ratings = pd.read_csv('old_ratings.csv')
-    new_ratings = pd.read_csv('ratings.csv', header=None, names=['user_id', 'book_id', 'rating'])
+    ratings = pd.read_csv('../../old_ratings.csv')
+    new_ratings = pd.read_csv('../../ratings.csv', header=None, names=['user_id', 'book_id', 'rating'])
     ratings = pd.concat([ratings, new_ratings], ignore_index=True)
 
     ratings['book_id'] -= 1
@@ -35,7 +37,7 @@ def prepare_ratings():
 
 
 def prepare_books():
-    books = pd.read_csv('translated_books.csv')
+    books = pd.read_csv('../../translated_books.csv')
     gid = books['goodreads_book_id']
     books.drop(labels=['ratings_count', 'work_ratings_count', 'work_text_reviews_count',
                        'ratings_1', 'ratings_2', 'ratings_3', 'ratings_4', 'ratings_5',
@@ -79,42 +81,42 @@ def prepare_books():
     books = pd.concat((books, authors), axis=1)
     book_features = sp.csr_matrix(books)
 
-    tags = pd.read_csv('tags.csv')
-
-    t = {}
-    for line in tags.values:
-        if type(line[1]) == str:
-            t[line[0]] = format_str(line[1])
-
-    book_tags = pd.read_csv('book_tags.csv')
-
-    g = {}
-    book_tags.head(50)
-    for i, line in enumerate(book_tags.values):
-        if line[0] in g:
-            if line[1] in t:
-                if line[2] >= 500:
-                    g[line[0]] += ' ' + t[line[1]]
-                else:
-                    del t[line[1]]
-        else:
-            if line[1] in t:
-                if line[2] >= 500:
-                    g[line[0]] = t[line[1]]
-
-    t = []
-    for i in gid:
-        if i in g:
-            t.append(g[i])
-        else:
-            t.append('')
-
-    vectorizer = CountVectorizer()
-    vectorized_tags = vectorizer.fit_transform(t)
-    transformer = TfidfTransformer()
-    transformed_tags = transformer.fit_transform(vectorized_tags)
-
-    book_features = sp.hstack((book_features, transformed_tags))
+    # tags = pd.read_csv('../tags.csv')
+    #
+    # t = {}
+    # for line in tags.values:
+    #     if type(line[1]) == str:
+    #         t[line[0]] = format_str(line[1])
+    #
+    # book_tags = pd.read_csv('../book_tags.csv')
+    #
+    # g = {}
+    # book_tags.head(50)
+    # for i, line in enumerate(book_tags.values):
+    #     if line[0] in g:
+    #         if line[1] in t:
+    #             if line[2] >= 500:
+    #                 g[line[0]] += ' ' + t[line[1]]
+    #             else:
+    #                 del t[line[1]]
+    #     else:
+    #         if line[1] in t:
+    #             if line[2] >= 500:
+    #                 g[line[0]] = t[line[1]]
+    #
+    # t = []
+    # for i in gid:
+    #     if i in g:
+    #         t.append(g[i])
+    #     else:
+    #         t.append('')
+    #
+    # vectorizer = CountVectorizer()
+    # vectorized_tags = vectorizer.fit_transform(t)
+    # transformer = TfidfTransformer()
+    # transformed_tags = transformer.fit_transform(vectorized_tags)
+    #
+    # book_features = sp.hstack((book_features, transformed_tags))
 
     return book_features
 
