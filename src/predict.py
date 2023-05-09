@@ -1,9 +1,7 @@
-import sys
-sys.path.append('../')
-
-from src.utils import prepare_preds
-from src.model import Model
+from utils import prepare_preds
+from model import Model
 
 model = Model()
+print("Model initialized")
 
 prepare_preds(model)

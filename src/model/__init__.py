@@ -1,1 +1,1 @@
-from model import Model
+from .rec_model import Model
