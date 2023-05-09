@@ -4,9 +4,8 @@ import pandas as pd
 import scipy.sparse as sp
 from sklearn.preprocessing import minmax_scale
 # from sklearn.feature_extraction.text import TfidfTransformer, CountVectorizer
-import sys
-sys.path.append('..')
-from src.model import Model
+
+from ..model import Model
 
 
 def delete_punctuation(text):
