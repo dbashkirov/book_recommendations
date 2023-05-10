@@ -1,0 +1,29 @@
+image: python:3.9
+
+stages:
+    - build
+    - test
+
+before_script:
+    - python --version
+
+build-job:
+    stage: build
+    script:
+        - echo "Installing packages..."
+
+lintest1:
+    stage: test
+    script:
+        - echo "Starting lintest1"
+        - pip install flake8
+        - flake8 src/utils/utils.py
+        - echo "Starting linters"
+
+lintest2:
+    stage: test
+    script:
+        - echo "Starting linters"
+        - pip install flake8
+        - flake8 src/train.py
+        - echo "Starting linters"
