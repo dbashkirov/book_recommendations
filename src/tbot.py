@@ -42,7 +42,7 @@ def message_handle(message):
             bot.send_message(message.from_user.id, "У нас нет книги с таким номером.")
         else:
             book_id[message.from_user.id] = int(message.text[7:])
-            with open("books.csv", "r", encoding="utf8") as file:
+            with open("../data/books.csv", "r", encoding="utf8") as file:
                 reader = csv.reader(file)
                 for j, row in enumerate(reader):
                     if j == int(message.text[7:]):
@@ -96,7 +96,7 @@ def message_handle(message):
             if a.find(str1) == -1:
                 bot.send_message(message.chat.id, "Книги нет в Вашем списке читаемого.")
                 return
-            with open("books.csv", "r", encoding="utf8") as file:
+            with open("../data/books.csv", "r", encoding="utf8") as file:
                 reader = csv.reader(file)
                 for j, row in enumerate(reader):
                     if j == int(str(message.text[9:])):
@@ -192,7 +192,7 @@ def message_handle(message):
                 reader1 = csv.reader(file1)
                 a = ""
                 for i, row1 in enumerate(reader1):
-                    with open("books.csv", "r", encoding="utf8") as file2:
+                    with open("../data/books.csv", "r", encoding="utf8") as file2:
                         reader2 = csv.reader(file2)
                         for j, row2 in enumerate(reader2):
                             if row2[0] == row1[0]:
@@ -623,7 +623,7 @@ def get_score(message):
         return
     if score == "Назад":
         if from_rec[message.from_user.id] == 1:
-            with open("registered.csv", "r", encoding="windows-1251") as file3:
+            with open("../data/registered.csv", "r", encoding="windows-1251") as file3:
                 reader = csv.reader(file3)
                 for row in reader:
                     if row[0] == str(message.from_user.id):
@@ -663,9 +663,9 @@ def get_score(message):
                             + ","
                             + str(data[0][5])
                         )
-            ReplaceLineInFile("registered.csv", str1, str2)
+            ReplaceLineInFile("../data/registered.csv", str1, str2)
         if from_rec[message.from_user.id] == 2:
-            with open("registered.csv", "r", encoding="windows-1251") as file:
+            with open("../data/registered.csv", "r", encoding="windows-1251") as file:
                 reader = csv.reader(file)
                 for j, row in enumerate(reader):
                     if row[0] == str(message.from_user.id):
@@ -705,7 +705,7 @@ def get_score(message):
                             + ","
                             + str(data[0][5])
                         )
-            ReplaceLineInFile("registered.csv", str1, str2)
+            ReplaceLineInFile("../data/registered.csv", str1, str2)
         make_keyboard(message)
         return
     if score == "Пропустить":
@@ -724,13 +724,13 @@ def get_score(message):
         return
     score_flag = False
     user_id = 0
-    with open("registered.csv", "r", encoding="windows-1251") as file:
+    with open("../data/registered.csv", "r", encoding="windows-1251") as file:
         reader = csv.reader(file)
         for j, row in enumerate(reader):
             if row[0] == str(message.from_user.id):
                 user_id = row[3]
     data = [[user_id, book_id[message.from_user.id], score]]
-    with open("data/raw/ratings.csv", "r", encoding="windows-1251") as file:
+    with open("../data/raw/ratings.csv", "r", encoding="windows-1251") as file:
         reader = csv.reader(file)
         for j, row in enumerate(reader):
             if row[0] == str(user_id) and row[1] == str(book_id[message.from_user.id]):
@@ -738,9 +738,9 @@ def get_score(message):
                 str1 = str(user_id) + "," + row[1] + "," + row[2]
                 str2 = str(data[0][0]) + "," + str(data[0][1]) + "," + str(data[0][2])
     if score_flag:
-        ReplaceLineInFile("data/raw/ratings.csv", str1, str2)
+        ReplaceLineInFile("../data/raw/ratings.csv", str1, str2)
     if not score_flag:
-        with open("data/raw/ratings.csv", "a", newline="") as csv_file:
+        with open("../data/raw/ratings.csv", "a", newline="") as csv_file:
             writer = csv.writer(csv_file)
             for line in data:
                 writer.writerow(line)
@@ -847,13 +847,13 @@ def get_score_cold(message):
         return
     score_flag = False
     user_id = 0
-    with open("registered.csv", "r", encoding="windows-1251") as file:
+    with open("../data/registered.csv", "r", encoding="windows-1251") as file:
         reader = csv.reader(file)
         for j, row in enumerate(reader):
             if row[0] == str(message.from_user.id):
                 user_id = row[3]
     data = [[user_id, book_id[message.from_user.id], score]]
-    with open("data/raw/ratings.csv", "r", encoding="windows-1251") as file:
+    with open("../data/raw/ratings.csv", "r", encoding="windows-1251") as file:
         reader = csv.reader(file)
         for j, row in enumerate(reader):
             if row[0] == str(user_id) and row[1] == str(book_id[message.from_user.id]):
@@ -861,9 +861,9 @@ def get_score_cold(message):
                 str1 = str(user_id) + "," + row[1] + "," + row[2]
                 str2 = str(data[0][0]) + "," + str(data[0][1]) + "," + str(data[0][2])
     if score_flag:
-        ReplaceLineInFile("data/raw/ratings.csv", str1, str2)
+        ReplaceLineInFile("../data/raw/ratings.csv", str1, str2)
     if not score_flag:
-        with open("data/raw/ratings.csv", "a", newline="") as csv_file:
+        with open("../data/raw/ratings.csv", "a", newline="") as csv_file:
             writer = csv.writer(csv_file)
             for line in data:
                 writer.writerow(line)
@@ -903,12 +903,12 @@ def recommend(message):
     global book_id
     fitted = False
     user_id = 0
-    with open("registered.csv", "r", encoding="windows-1251") as file:
+    with open("../data/registered.csv", "r", encoding="windows-1251") as file:
         reader = csv.reader(file)
         for row in reader:
             if int(row[0]) == int(message.from_user.id):
                 user_id = int(row[3])
-    with open("predictions.csv", "r", encoding="utf8") as file:
+    with open("../data/predictions.csv", "r", encoding="utf8") as file:
         reader = csv.reader(file)
         for row in reader:
             if row[0] == str(user_id - 1):
@@ -917,7 +917,7 @@ def recommend(message):
     if not fitted:
         rated_flag = False
         read_flag = False
-        with open("registered.csv", "r", encoding="windows-1251") as file:
+        with open("../data/registered.csv", "r", encoding="windows-1251") as file:
             reader = csv.reader(file)
             for row in reader:
                 if row[3] == str(user_id):
@@ -929,7 +929,7 @@ def recommend(message):
             for j, row in enumerate(reader):
                 if j == int(rec_iter):
                     needed_id = row[0]
-        with open("data/raw/ratings.csv", "r", encoding="windows-1251") as file:
+        with open("../data/raw/ratings.csv", "r", encoding="windows-1251") as file:
             reader = csv.reader(file)
             for j, row in enumerate(reader):
                 if row[0] == str(user_id) and row[1] == str(needed_id):
@@ -941,7 +941,7 @@ def recommend(message):
             if a.find(needed_id) != -1:
                 read_flag = True
         if read_flag or rated_flag:
-            with open("registered.csv", "r", encoding="windows-1251") as file3:
+            with open("../data/registered.csv", "r", encoding="windows-1251") as file3:
                 reader = csv.reader(file3)
                 for row in reader:
                     if row[0] == str(message.from_user.id):
@@ -981,7 +981,7 @@ def recommend(message):
                             + ","
                             + str(data[0][5])
                         )
-            ReplaceLineInFile("registered.csv", str1, str2)
+            ReplaceLineInFile("../data/registered.csv", str1, str2)
             recommend(message)
             return
         with open("books_rec.csv", "r", encoding="utf8") as file:
@@ -993,7 +993,7 @@ def recommend(message):
                     from_rec[message.from_user.id] = 1
                     bot.register_next_step_handler(message, get_score)
 
-        with open("registered.csv", "r", encoding="windows-1251") as file3:
+        with open("../data/registered.csv", "r", encoding="windows-1251") as file3:
             reader = csv.reader(file3)
             for row in reader:
                 if row[0] == str(message.from_user.id):
@@ -1033,18 +1033,18 @@ def recommend(message):
                         + ","
                         + str(data[0][5])
                     )
-        ReplaceLineInFile("registered.csv", str1, str2)
+        ReplaceLineInFile("../data/registered.csv", str1, str2)
         return
 
     if fitted:
         rated_flag = False
         read_flag = False
-        with open("registered.csv", "r", encoding="windows-1251") as file:
+        with open("../data/registered.csv", "r", encoding="windows-1251") as file:
             reader = csv.reader(file)
             for row in reader:
                 if row[3] == str(user_id):
                     iterator = row[4]
-        with open("predictions.csv", "r", encoding="utf8") as file:
+        with open("../data/predictions.csv", "r", encoding="utf8") as file:
             reader = csv.reader(file)
             k = 0
             for j, row in enumerate(reader):
@@ -1053,7 +1053,7 @@ def recommend(message):
                 if str(k) == iterator:
                     needed_id = str(int(row[1]) + 1)
         # проверка
-        with open("data/raw/ratings.csv", "r", encoding="windows-1251") as file:
+        with open("../data/raw/ratings.csv", "r", encoding="windows-1251") as file:
             reader = csv.reader(file)
             for j, row in enumerate(reader):
                 if row[0] == str(user_id) and row[1] == str(needed_id):
@@ -1065,7 +1065,7 @@ def recommend(message):
             if a.find(needed_id) != -1:
                 read_flag = True
         if read_flag or rated_flag:
-            with open("registered.csv", "r", encoding="windows-1251") as file3:
+            with open("../data/registered.csv", "r", encoding="windows-1251") as file3:
                 reader = csv.reader(file3)
                 for row in reader:
                     if row[0] == str(message.from_user.id):
@@ -1105,11 +1105,11 @@ def recommend(message):
                             + ","
                             + str(data[0][5])
                         )
-            ReplaceLineInFile("registered.csv", str1, str2)
+            ReplaceLineInFile("../data/registered.csv", str1, str2)
             recommend(message)
             return
 
-        with open("books.csv", "r", encoding="utf8") as file2:
+        with open("../data/books.csv", "r", encoding="utf8") as file2:
             reader = csv.reader(file2)
             for i, row in enumerate(reader):
                 if str(i) == needed_id:
@@ -1117,7 +1117,7 @@ def recommend(message):
                     book_id[message.from_user.id] = int(row[0])
                     from_rec[message.from_user.id] = 2
                     break
-        with open("registered.csv", "r", encoding="windows-1251") as file3:
+        with open("../data/registered.csv", "r", encoding="windows-1251") as file3:
             reader = csv.reader(file3)
             for row in reader:
                 if row[0] == str(message.from_user.id):
@@ -1157,7 +1157,7 @@ def recommend(message):
                         + ","
                         + str(data[0][5])
                     )
-        ReplaceLineInFile("registered.csv", str1, str2)
+        ReplaceLineInFile("../data/registered.csv", str1, str2)
         bot.register_next_step_handler(message, get_score)
 
 
@@ -1166,7 +1166,7 @@ def cos_rec(user_id, depth):
     user = [0] * 3
     distances = []
     sum_distances = 0
-    with open("registered.csv", "r", encoding="Windows-1251") as file:
+    with open("../data/registered.csv", "r", encoding="Windows-1251") as file:
         reader = csv.reader(file)
         for j, row in enumerate(reader):
             if int(row[3]) != user_id:
