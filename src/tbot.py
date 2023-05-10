@@ -4,7 +4,7 @@ import time
 import telebot
 from telebot import types
 
-bot = telebot.TeleBot("912139890:AAHm8sDNQ-7tlpCAXjyP-3br1YSK1xPs_yo")
+bot = telebot.TeleBot("YOUR TOKEN")
 sex = {}
 age = {}
 book_id = {}
