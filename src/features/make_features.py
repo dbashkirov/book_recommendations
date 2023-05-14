@@ -1,18 +1,31 @@
 import pandas as pd
 import scipy.sparse as sp
 from sklearn.preprocessing import minmax_scale
+import click
 
 # from sklearn.feature_extraction.text import TfidfTransformer, CountVectorizer
 
 
-def prepare_books():
+@click.command()
+@click.argument(
+    "book_path", type=click.Path(), default="data/processed/translated_books.csv"
+)
+@click.argument("tags_path", type=click.Path(), default="")
+def prepare_books(
+    book_path: str = "data/processed/translated_books.csv", tags_path: str = ""
+):
     """
     Function to prepare book data for fitting and prediction
+    Parameters
+    ----------
+    book_path
+    tags_path
+
     Returns
     -------
-    book_features as sparce matrix
+
     """
-    books = pd.read_csv("data/processed/translated_books.csv")
+    books = pd.read_csv(book_path)
     books.drop(
         labels=[
             "ratings_count",
@@ -80,7 +93,7 @@ def prepare_books():
     books = pd.concat((books, authors), axis=1)
     book_features = sp.csr_matrix(books)
 
-    # tags = pd.read_csv('../tags.csv')
+    # tags = pd.read_csv(tags_path)
     #
     # t = {}
     # for line in tags.values:
@@ -117,11 +130,10 @@ def prepare_books():
     #
     # book_features = sp.hstack((book_features, transformed_tags))
 
-    return book_features
+    click.echo("Book features prepared")
+    sp.save_npz("models/book_features.npz", book_features)
+    click.echo("Book features saved at")
 
 
-book_features = prepare_books()
-print("Book features prepared")
-
-sp.save_npz("models/book_features.npz", book_features)
-print("Book features saved")
+if __name__ == "__main__":
+    prepare_books()
