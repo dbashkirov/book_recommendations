@@ -1,0 +1,28 @@
+stages:
+  prepare_books:
+    cmd: python src/features/make_features.py data/processed/translated_books.csv
+    deps:
+      - data/processed/translated_books.csv
+      - src/features/make_features.py
+    outs:
+      - models/book_features.npz
+
+  train:
+    cmd: python src/train.py models/book_features.npz data/raw/old_ratings.csv data/raw/ratings.csv 10
+    deps:
+      - models/book_features.npz
+      - data/raw/old_ratings.csv
+      - data/raw/ratings.csv
+      - src/train.py
+    outs:
+      - models/model.pkl
+
+  predict:
+    cmd: python src/predict.py data/raw/ratings.csv models/book_features.npz data/predictions.csv
+    deps:
+      - models/book_features.npz
+      - models/model.pkl
+      - data/raw/ratings.csv
+      - src/predict.py
+    outs:
+      - data/predictions.csv

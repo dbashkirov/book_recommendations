@@ -1,0 +1,54 @@
+schema: '2.0'
+stages:
+  prepare_books:
+    cmd: python src/features/make_features.py data/processed/translated_books.csv
+    deps:
+    - path: data/processed/translated_books.csv
+      md5: 2e3abb6f833dfbf8089c5c034e6bb022
+      size: 5296682
+    - path: src/features/make_features.py
+      md5: 214e5dbe8cee3ac7ea749b304dffa0cd
+      size: 3734
+    outs:
+    - path: models/book_features.npz
+      md5: 08d758191fd1337a6630c545978aae94
+      size: 41397
+  train:
+    cmd: python src/train.py models/book_features.npz data/raw/old_ratings.csv data/raw/ratings.csv
+      10
+    deps:
+    - path: data/raw/old_ratings.csv
+      md5: 3000836fc622c9c6d3ba021ce5a28835
+      size: 72126826
+    - path: data/raw/ratings.csv
+      md5: 855daa567dbed8d46e23d23e05717903
+      size: 14849
+    - path: models/book_features.npz
+      md5: 08d758191fd1337a6630c545978aae94
+      size: 41397
+    - path: src/train.py
+      md5: 90c219b66d8e293908e73dbf38e8b901
+      size: 1035
+    outs:
+    - path: models/model.pkl
+      md5: 81ed551031743fed748d3811b4687a21
+      size: 33308168
+  predict:
+    cmd: python src/predict.py data/raw/ratings.csv models/book_features.npz data/predictions.csv
+    deps:
+    - path: data/raw/ratings.csv
+      md5: 855daa567dbed8d46e23d23e05717903
+      size: 14849
+    - path: models/book_features.npz
+      md5: 08d758191fd1337a6630c545978aae94
+      size: 41397
+    - path: models/model.pkl
+      md5: 81ed551031743fed748d3811b4687a21
+      size: 33308168
+    - path: src/predict.py
+      md5: 02cf70219760621b8014eddf00626b10
+      size: 699
+    outs:
+    - path: data/predictions.csv
+      md5: 25bd26bdf6d6213d000c1a5aff035ca3
+      size: 70685
