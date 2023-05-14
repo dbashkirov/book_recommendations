@@ -1,0 +1,8 @@
+[core]
+    remote = myremote
+    autostage = false
+['remote "myremote"']
+    url = s3://mlops-5kdm6/book_recommendation
+    endpointurl = https://storage.yandexcloud.net
+    access_key_id = YCAJEv7bh4aLa7hQZN3NGIacK
+    secret_access_key = YCMzWbHhC4i1x8K13Zq-r9dBHAJ_xgEWPaprmyRL
