@@ -58,13 +58,6 @@ def train(
         mlflow.log_metric("ndcg_score", score)
         mlflow.log_artifact("models/model.pkl")
 
-    client = MlflowClient()
-    experiment_name = os.environ["MLFLOW_EXPERIMENT_NAME"]
-    experiment = dict(mlflow.get_experiment_by_name(experiment_name))
-    experiment_id = experiment["experiment_id"]
-    df = mlflow.search_runs(experiment_id)
-    best_run_id = df.loc[0, "run_id"]
-
 
 if __name__ == "__main__":
     train()
