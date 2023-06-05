@@ -59,7 +59,8 @@ def train(
         mlflow.log_artifact("models/model.pkl")
 
     client = MlflowClient()
-    experiment = dict(mlflow.get_experiment_by_name(os.environ["MLFLOW_EXPERIMENT_NAME"]))
+    experiment_name = os.environ["MLFLOW_EXPERIMENT_NAME"]
+    experiment = dict(mlflow.get_experiment_by_name(experiment_name))
     experiment_id = experiment["experiment_id"]
     df = mlflow.search_runs(experiment_id)
     best_run_id = df.loc[0, "run_id"]
