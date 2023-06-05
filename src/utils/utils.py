@@ -20,23 +20,21 @@ def prepare_ratings(old_ratings_path: str, new_ratings_path: str):
     new_ratings = pd.read_csv(
         new_ratings_path, header=None, names=["user_id", "book_id", "rating"]
     )
-    ratings = pd.concat([ratings, new_ratings], ignore_index=True)
+    df = pd.concat([ratings, new_ratings], ignore_index=True)
 
-    ratings["book_id"] -= 1
-    ratings["user_id"] -= 1
-    new_ratings["book_id"] -= 1
-    new_ratings["user_id"] -= 1
+    df["book_id"] -= 1
+    df["user_id"] -= 1
 
     ratings = sp.coo_matrix(
         (
-            np.array(ratings.rating.values, dtype=np.int64),
+            np.array(df.rating.values, dtype=np.int64),
             (
-                np.array(ratings.user_id.values, dtype=np.int64),
-                np.array(ratings.book_id.values, dtype=np.int64),
+                np.array(df.user_id.values, dtype=np.int64),
+                np.array(df.book_id.values, dtype=np.int64),
             ),
         )
     )
-    return ratings
+    return ratings, df
 
 
 def prepare_preds(
