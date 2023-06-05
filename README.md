@@ -1,3 +1,8 @@
 # book_recommendations
 
-Презентация: https://docs.google.com/presentation/d/1B3UkkNwA8nQNlkxoueb3pPsSVpZosR0-xcftH7OKHfc/edit?usp=sharing
+1. dvc pull
+2. python -m venv env
+3. source env/bin/activate
+4. pip install -r requirements.txt
+5. dvc repro
+
