@@ -3,8 +3,6 @@ from utils import prepare_ratings
 from model import Model
 import scipy.sparse as sp
 import mlflow
-# from mlflow.models.signature import infer_signature
-from mlflow.tracking import MlflowClient
 from dotenv import load_dotenv
 import os
 from sklearn.metrics import ndcg_score
@@ -57,13 +55,6 @@ def train(
         mlflow.log_param("n_epochs", n_epochs)
         mlflow.log_metric("ndcg_score", score)
         mlflow.log_artifact("models/model.pkl")
-
-    client = MlflowClient()
-    experiment_name = os.environ["MLFLOW_EXPERIMENT_NAME"]
-    experiment = dict(mlflow.get_experiment_by_name(experiment_name))
-    experiment_id = experiment["experiment_id"]
-    df = mlflow.search_runs(experiment_id)
-    best_run_id = df.loc[0, "run_id"]
 
 
 if __name__ == "__main__":
