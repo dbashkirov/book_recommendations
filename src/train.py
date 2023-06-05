@@ -3,8 +3,6 @@ from utils import prepare_ratings
 from model import Model
 import scipy.sparse as sp
 import mlflow
-# from mlflow.models.signature import infer_signature
-from mlflow.tracking import MlflowClient
 from dotenv import load_dotenv
 import os
 from sklearn.metrics import ndcg_score
