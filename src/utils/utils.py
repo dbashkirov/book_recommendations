@@ -15,33 +15,33 @@ def format_str(text):
     return " ".join(words)
 
 
-def prepare_ratings():
-    ratings = pd.read_csv("data/raw/old_ratings.csv")
+def prepare_ratings(old_ratings_path: str, new_ratings_path: str):
+    ratings = pd.read_csv(old_ratings_path)
     new_ratings = pd.read_csv(
-        "ratings.csv", header=None, names=["user_id", "book_id", "rating"]
+        new_ratings_path, header=None, names=["user_id", "book_id", "rating"]
     )
-    ratings = pd.concat([ratings, new_ratings], ignore_index=True)
+    df = pd.concat([ratings, new_ratings], ignore_index=True)
 
-    ratings["book_id"] -= 1
-    ratings["user_id"] -= 1
-    new_ratings["book_id"] -= 1
-    new_ratings["user_id"] -= 1
+    df["book_id"] -= 1
+    df["user_id"] -= 1
 
     ratings = sp.coo_matrix(
         (
-            np.array(ratings.rating.values, dtype=np.int64),
+            np.array(df.rating.values, dtype=np.int64),
             (
-                np.array(ratings.user_id.values, dtype=np.int64),
-                np.array(ratings.book_id.values, dtype=np.int64),
+                np.array(df.user_id.values, dtype=np.int64),
+                np.array(df.book_id.values, dtype=np.int64),
             ),
         )
     )
-    return ratings
+    return ratings, df
 
 
-def prepare_preds(model):
+def prepare_preds(
+    model, new_ratings_path: str, book_features_path: str, output_path: str
+):
     new_ratings = pd.read_csv(
-        "data/raw/ratings.csv", header=None, names=["user_id", "book_id", "rating"]
+        new_ratings_path, header=None, names=["user_id", "book_id", "rating"]
     )
 
     new_ratings["book_id"] -= 1
@@ -65,7 +65,7 @@ def prepare_preds(model):
     preds = pd.DataFrame(
         data=zip(pred_u, pred_b), index=None, columns=["user_id", "book_id"]
     )
-    book_features = sp.load_npz("models/book_features.npz")
+    book_features = sp.load_npz(book_features_path)
     preds["score"] = model.predict(
         preds.user_id.values, preds.book_id.values, item_features=book_features
     )
@@ -78,4 +78,4 @@ def prepare_preds(model):
         )
 
     predictions.drop(labels=["score"], axis=1, inplace=True)
-    predictions.to_csv("predictions.csv", index=False)
+    predictions.to_csv(output_path, index=False)
