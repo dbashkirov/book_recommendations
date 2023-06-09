@@ -27,11 +27,11 @@ stages:
       md5: 08d758191fd1337a6630c545978aae94
       size: 41397
     - path: src/train.py
-      md5: f393ab7cf6381dda7baf4bfcc445bc45
-      size: 2281
+      md5: b7948bdd785746ed3d14b29333f5b03c
+      size: 1993
     outs:
     - path: models/model.pkl
-      md5: 5b8c6d241ccaf6de0048e99cdd111d7a
+      md5: d15bf13f3515d756dd2db102cc470036
       size: 33308168
   predict:
     cmd: python src/predict.py data/raw/ratings.csv models/book_features.npz data/predictions.csv
@@ -43,12 +43,12 @@ stages:
       md5: 08d758191fd1337a6630c545978aae94
       size: 41397
     - path: models/model.pkl
-      md5: 5b8c6d241ccaf6de0048e99cdd111d7a
+      md5: d15bf13f3515d756dd2db102cc470036
       size: 33308168
     - path: src/predict.py
       md5: 02cf70219760621b8014eddf00626b10
       size: 699
     outs:
     - path: data/predictions.csv
-      md5: cc2d6a28395f6bc3fe4cfcd6a22e7f34
-      size: 71358
+      md5: 803120cf689962c70b612fc2762703ae
+      size: 70867

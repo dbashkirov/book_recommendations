@@ -55,6 +55,7 @@ def train(
         mlflow.log_param("n_epochs", n_epochs)
         mlflow.log_metric("ndcg_score", score)
         mlflow.log_artifact("models/model.pkl")
+        mlflow.log_artifact("models/book_features.npz")
 
 
 if __name__ == "__main__":

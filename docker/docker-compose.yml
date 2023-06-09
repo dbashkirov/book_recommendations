@@ -52,10 +52,25 @@ services:
       - MLFLOW_S3_ENDPOINT_URL=${MLFLOW_S3_ENDPOINT_URL}
     command: mlflow server --backend-store-uri postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db/${POSTGRES_DB} --default-artifact-root s3://${AWS_S3_BUCKET}/ --host 0.0.0.0
 
+  app:
+    container_name: model_service
+    restart: always
+    build: ./book_rec_model
+    image: book_rec_model
+    ports:
+      - "8003:8081"
+    networks:
+      - app
+    environment:
+      - MLFLOW_TRACKING_URI=http://mlflow:5000
+      - MLFLOW_S3_ENDPOINT_URL=${MLFLOW_S3_ENDPOINT_URL}
+
 volumes:
   postgres:
   my-data:
 
 networks:
   postgres:
+    driver: bridge
+  app:
     driver: bridge
